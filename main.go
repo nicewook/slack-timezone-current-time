@@ -15,6 +15,7 @@ func main() {
 
 	handler.HandleFunc("/tz", api.TimeZoneCurrentTime)
 	handler.HandleFunc("/tzn", api.TimeZoneCurrentTimeNewYork)
+	handler.HandleFunc("/tzs", api.TimeZoneCurrentTimeSeoul)
 
 	err := http.ListenAndServe(":8080", handler)
 	if err != nil {
