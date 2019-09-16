@@ -30,6 +30,18 @@ func init() {
 	fmt.Println(slackSigningSecret)
 }
 
+func checkTime(t time.Time) bool {
+
+	day := t.Weekday()
+	hours := t.Hour()
+	fmt.Println("day: ", day, " hours: ", hours)
+
+	return (day >= 1 &&
+		day <= 5 &&
+		hours >= 9 &&
+		hours < 18)
+}
+
 // TimeZoneCurrentTime is Translation function
 func TimeZoneCurrentTime(w http.ResponseWriter, r *http.Request) {
 
@@ -61,6 +73,8 @@ func TimeZoneCurrentTime(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	timezoneCurrentTime := time.Now().In(loc)
+	isBusinessHour := checkTime(timezoneCurrentTime)
+	fmt.Println("current Time: ", timezoneCurrentTime, " and Business Hour? ", isBusinessHour)
 
 	// slactPost := fmt.Sprintf("`source`: %s\n`target`: %s\n", srcText, tgtText)
 	// params := &slack.Msg{
@@ -91,14 +105,6 @@ func TimeZoneCurrentTimeNewYork(w http.ResponseWriter, r *http.Request) {
 		log.Println("failed on VerifyRequest()")
 		return
 	}
-
-	// Parsing Slack Slash Command - no need for /tzn
-	// s, err := slack.SlashCommandParse(r)
-	// if err != nil {
-	// 	w.WriteHeader(http.StatusInternalServerError)
-	// 	log.Printf("failed to parse Slack Slash Command: %v", err)
-	// 	return
-	// }
 
 	// TZDN: TimeZone database name
 	newYorkTimezonDatabaseName := "America/New_York" // https://www.wikiwand.com/en/List_of_tz_database_time_zones
