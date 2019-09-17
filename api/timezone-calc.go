@@ -13,6 +13,7 @@ import (
 	"os"
 	"regexp"
 	"strconv"
+	"strings"
 	"time"
 
 	"github.com/nlopes/slack"
@@ -87,11 +88,15 @@ func TimeZoneCurrentTime(w http.ResponseWriter, r *http.Request) {
 	// TZDN: TimeZone database name
 	var responseText string
 	for _, tzdbName := range timezoneNameArray {
-		matched, _ := regexp.MatchString(s.Text, tzdbName)
+		matched, _ := regexp.MatchString(strings.ToLower(s.Text), strings.ToLower(tzdbName))
 		if matched {
 			resp := makeResponse(tzdbName)
 			responseText += resp
 		}
+	}
+
+	if responseText == "" {
+		responseText = "No match for " + s.Text
 	}
 
 	params := &slack.Msg{
