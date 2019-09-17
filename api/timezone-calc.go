@@ -6,7 +6,6 @@ import (
 	"crypto/sha256"
 	"encoding/hex"
 	"encoding/json"
-	"fmt"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -29,14 +28,13 @@ var slackSigningSecret string
 func init() {
 	// set SLACK_SIGNING_SECRET=<Signing Secret of your Slack App> in windows cli
 	slackSigningSecret = os.Getenv("SLACK_SIGNING_SECRET")
-	fmt.Println(slackSigningSecret)
+	//fmt.Println(slackSigningSecret)
 }
 
 func checkTime(t time.Time) bool {
 
 	day := t.Weekday()
 	hours := t.Hour()
-	fmt.Println("day: ", day, " hours: ", hours)
 
 	return (day >= 1 &&
 		day <= 5 &&
@@ -67,7 +65,7 @@ func makeResponse(timezonDatabaseName string) string {
 	return responseText
 }
 
-// TimeZoneCurrentTime is Translation function
+// TimeZoneCurrentTime handles /tz Slack Slash Command
 func TimeZoneCurrentTime(w http.ResponseWriter, r *http.Request) {
 
 	// Verify Slack Request with Signing Secret, and Timeout check
@@ -85,7 +83,8 @@ func TimeZoneCurrentTime(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// TZDN: TimeZone database name
+	// Get all Matching TimeZone database name using regexp
+	// and get Timezone Current Time
 	var responseText string
 	for _, tzdbName := range timezoneNameArray {
 		matched, _ := regexp.MatchString(strings.ToLower(s.Text), strings.ToLower(tzdbName))
@@ -113,7 +112,7 @@ func TimeZoneCurrentTime(w http.ResponseWriter, r *http.Request) {
 	w.Write(b)
 }
 
-// TimeZoneCurrentTimeNewYork is Translation function
+// TimeZoneCurrentTimeNewYork handles /tzn Slack Slash Command
 func TimeZoneCurrentTimeNewYork(w http.ResponseWriter, r *http.Request) {
 
 	// Verify Slack Request with Signing Secret, and Timeout check
@@ -138,7 +137,7 @@ func TimeZoneCurrentTimeNewYork(w http.ResponseWriter, r *http.Request) {
 	w.Write(b)
 }
 
-// TimeZoneCurrentTimeSeoul is Translation function
+// TimeZoneCurrentTimeSeoul handles /tzs Slack Slash Command
 func TimeZoneCurrentTimeSeoul(w http.ResponseWriter, r *http.Request) {
 
 	// Verify Slack Request with Signing Secret, and Timeout check
