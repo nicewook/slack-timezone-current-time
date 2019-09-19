@@ -1,6 +1,6 @@
 # Slack Slash Command to get Specific Timezone's Current Time
 
-- Related Blog Post link (in Korean): https://jusths.tistory.com/151
+- Related Blog Post link (in Korean): https://jusths.tistory.com/151 https://jusths.tistory.com/152
 
 ## Implementation Phase 1. Local Server which parses Slack's HTTP Post
 
